@@ -44,9 +44,10 @@ require_relative '../models/entry'
 RSpec.describe Entry do # The file is a spec file and tests for Entry
 
   describe "attributes" do # We are testing the Entry attributes
+    let (:entry) { Entry.new('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com') }
 
     it "responds to name" do # Each it represents a unique test
-      entry = Entry.new
+      # entry = Entry.new Instead of defining entry in each test, we can just define it once using helper methods like let.
       expect(entry).to respond_to(:name) # Each RSpec test ends with one or more expect method(s). If those expectations are met, the test passes. Otherwise, it fails.
     end
   end

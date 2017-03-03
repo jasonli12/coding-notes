@@ -39,3 +39,11 @@ Effective tests:
 + Use data that makes them east to read and understand.
 + Use real data when needed.
 + Represent one step towards your overall goal.
+
+**Red-Green-Refactor-Cycle**:
+
+1. *Think*: Figure out what test will best move your code to completion.
+2. *Red*: Write a very small amount of code, run the tests and watch the new test fail. The test bar should turn red now.
+3. *Green*: Write a very small amount of production code, run the tests and watch the new tests pass. The test bar should turn green now.
+4. *Refactor*: Look at the code you've written and ask how you can improve it (ex. duplication, 'code smells'). After refactoring, rerun the tests and make sure they still pass.
+5. *Repeat*: Do it again.

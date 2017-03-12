@@ -79,3 +79,51 @@ end
 `WelcomeController` is a Ruby class and contains two empty methods corresponding to view names (i.e. `index` and `about`).
 
 **Default Rendering**: When a controller's method's purpose is to invoke a view, it must be named with respect to the view. Ex: The `index` method in the `WelcomeController` will invoke the `index` view inside the `app/views/welcome` directory.
+
+### Routing in Rails
+
+The controller generator (`rails generate controller welcome index about`) created the basic code needed for the `WelcomeController` and its views, and it also created code in the `config/routes.rb` file:
+
+``` ruby
+
+Rails.application.routes.draw do
+  get 'welcome/index'
+
+  get 'welcome/about'
+  ...
+end
+
+```
+This code creates HTTP `GET` routes for the index and about views.
+
+**HTTP (Hypertext Transfer Protocol)**: the protocol that the Internet uses to communicate with websites. The `get` action corresponds to the HTTP `GET` verb. `GET` requests are used to retrieve information identified by the URL.
+
+If `routes.rb` doesn't specify a `GET` action, the view will not be served because the application won't know what to get when a user sends a request.
+
+``` ruby
+
+Rails.application.routes.draw do
+  get 'welcome/index'
+
+  get 'welcome/about'
+
+  root 'welcome#index'
+  ...
+end
+
+```
+
+The `root` method allows us to specify the default page to load when we navigate to the home page URL
+
+`rake routes`: shows all your app's available routes
+
+```
+       Prefix Verb URI Pattern              Controller#Action
+welcome_index GET  /welcome/index(.:format) welcome#index
+welcome_about GET  /welcome/about(.:format) welcome#about
+         root GET  /                        welcome#index
+```
+`Prefix`: the route name: welcome_index
+`Verb`: the HTTP action associated with the route: `GET`
+`URI`: URL used to request the view: `/welcome/index`
+`Controller#Action`: route destination, which translates to the controller and associated view: `welcome#index`

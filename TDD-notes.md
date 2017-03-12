@@ -1,5 +1,9 @@
 # Test Driven Development (TDD)
 
+**Why We Write Test Code**
++ To ensure that production code does what it's intended to do.
++ To ensure production code doesn't break when you refactor it. Refactoring is the process of restructuring existing computer code - changing the factoring - without changing its external behavior.
+
 **Test Driven Development (TDD)**: an approach to development where you write a test before you write just enough production code to fulfill that test and refactoring. This means that every line of code ends up being tested.
 
 1. Add a test.

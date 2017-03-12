@@ -53,3 +53,29 @@ group :production do
 + Analogy: A customer (user) places an with the waiter (controller). The waiter (controller) informs the kitchen (model) of the order. After the kitchen (model) makes the order, the waiter serves the dish (view) to a customer.
 
 + MVC is the basic architectural pattern that guides the creation of all Rails applications
+
+
+### Generating a Controller and views
+
+`rails generate controller welcome index about`
+
+`welcome`: represents controller name
+`index` and `about`: views corresponding to `welcome` controller
+
+``` ruby
+
+app/controllers/welcome_controller.rb
+
+class WelcomeController < ApplicationController
+  def index
+  end
+
+  def about
+  end
+end
+
+```
+
+`WelcomeController` is a Ruby class and contains two empty methods corresponding to view names (i.e. `index` and `about`).
+
+**Default Rendering**: When a controller's method's purpose is to invoke a view, it must be named with respect to the view. Ex: The `index` method in the `WelcomeController` will invoke the `index` view inside the `app/views/welcome` directory.

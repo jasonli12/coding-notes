@@ -53,6 +53,6 @@ RSpec.describe Entry do # The file is a spec file and tests for Entry
   end
 end
 ```
-`let`: an RSpec helper methods that allows us to remove duplicate code when our tests have a commonly used value. In the example above, `let (:entry)` creates an `entry` method that returns a new entry item when called. The `let` method is only run if the example calls for it.
+`let`: an RSpec helper method that allows us to remove duplicate code when our tests have a commonly used value. In the example above, `let (:entry)` creates an `entry` method that returns a new entry item when called. The `let` method is only run if the example calls for it.
 
 `rails generate rspec:install`: creates a spec directory to write our tests.

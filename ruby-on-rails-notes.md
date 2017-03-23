@@ -55,7 +55,7 @@ group :production do
 + MVC is the basic architectural pattern that guides the creation of all Rails applications
 
 
-### Generating a Controller and views
+### Generating a Controller and Views
 
 `rails generate controller welcome index about`
 
@@ -79,6 +79,73 @@ end
 `WelcomeController` is a Ruby class and contains two empty methods corresponding to view names (i.e. `index` and `about`).
 
 **Default Rendering**: When a controller's method's purpose is to invoke a view, it must be named with respect to the view. Ex: The `index` method in the `WelcomeController` will invoke the `index` view inside the `app/views/welcome` directory.
+
+### Generating Models
+
+```
+
+$ rails generate model Post title:string body:text
+      invoke  active_record
+   identical    db/migrate/20150606010447_create_posts.rb
+   identical    app/models/post.rb
+      invoke    rspec
+      create      spec/models/post_spec.rb
+```
+
+The model generator (`rails generate model Post title:string body:text`) created a model called `Post` with two attributes: `title` and `body`. `title` will be a string data type, while `body` will be a text data type.
+
+`post.rb`: a Ruby class that represents the `Post` model. This class will handle the logic and define the behavior of posts.
+
+`post_spec.rb`: the test spec for the `Post` class.
+
+`20150606010447_create_posts.rb`: the database migration file. A migration file defines the action taken on a database for a given model. An app will have many migration files and together they serve as a set of instructions for building a database.
+
+```
+$ cat app/models/post.rb
+class Post < ApplicationRecord
+end
+```
+When the model generator created this template, it made the `Post` class inherit from `ApplicationRecord` which in turns inherits from `ActiveRecord::Base`. Up until Rails 4.2, all models inherited from `ActiveRecord::Base`, but starting with Rails 5, all models inherited from `ApplicationRecord`. The idea is that any customizations and extensions will be localized only to models inheriting from `ApplicationRecord`, which is effectively your app.
+
+```Ruby
+# app/models/application_record.rb
+
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+end
+```
+
+`ActiveRecord::Base` essentially handles interaction with the database and allows us to persist data through our class.
+
+`schema.rb`: a file located in the `db` directroy that represents an application's complete database architecture; the tables it uses and how those tables relate to each other.
+
+Rake is a Ruby build command that allows us to execute administrative tasks for our application. To see a complete list of rake tasks, type `rake --tasks` from the command line.
+
+#### Relationships and Associations
+
+```Ruby
+
+rails generate model Comment body:text post:references
+
+$ cat app/models/comment.rb
+class Comment < ActiveRecord::Base
+  belongs_to :post
+end
+
+```
+In the example above, a comment belongs to a post or a post has many comments. The `post_id` attribute was generated when the `Comment` model was generated with the `post:references` argument.
+
+Each model instance in a Rails app automatically gets assigned an `id` attribute to uniquely identify it. Each `post` and `comment` will each have a unique `id`. To make a comment belong to a post, we need to provide the post `id` to the comment. This is achieved using a foreign key.
+
+A foreign key is the `id` of one model, used as an attribute in another model, in order to see the relationship. In the Post/Comment example, the `Comment` model will need to have an attribute named `post_id`, which exists so that a `comment` can belong to a `post`. To allow many comments belong to one `post`, you will have many comment records with the same `post_id` attribute.
+
+```Ruby
+class Post < ApplicationRecord
+  has_many :comments
+end
+```
+The `has_many` method allows a post instance to have many comments related to it and also methods to retrieve comments that belong to a post.
+
 
 ### Routing in Rails
 

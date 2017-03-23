@@ -222,3 +222,133 @@ Downsides of CommonJS over module patterns
 + For as long as the script to load a module is running, it blocks the browser from running anything else until it finishes loading.
 
 ### AMD (Asynchronous Module Definition)
+
+``` JavaScript
+
+define(['myModule', 'myOtherModule'], function(myModule, myOtherModule) {
+  console.log(myModule.hello());
+});
+
+```
+
+`define` takes as its first argument an array of each of the module's dependencies. These dependencies are loaded in the background (in a non-blocking manner), and once loaded `define` calls the callback function it is given.
+
+The callback function then takes, as arguments, the dependencies that were loaded. Finally, the dependencies, themselves, must also be defined using the `define` keyword. `myModule` might look like the following:
+
+``` JavaScript
+
+
+define([], function() {
+
+  return {
+    hello: function() {
+      console.log('hello');
+    },
+    goodbye: function() {
+      console.log('goodbye');
+    }
+  };
+});
+
+```
+
+With AMD, your modules can be objects, functions, constructors, strings, JSON, and many other types, while CommonJS only supports objects as modules.
+
+AMD is not compatible with io, filesystem, and other server-oriented features available via CommonJS.
+
+### UMD (Universal Module Definition)
+
+UMD creates a way to use either AMD or CommonJS, while also supporting the global variable definition:
+
+```JavaScript
+
+
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+      // AMD
+    define(['myModule', 'myOtherModule'], factory);
+  } else if (typeof exports === 'object') {
+      // CommonJS
+    module.exports = factory(require('myModule'), require('myOtherModule'));
+  } else {
+    // Browser globals (Note: root is window)
+    root.returnExports = factory(root.myModule, root.myOtherModule);
+  }
+}(this, function (myModule, myOtherModule) {
+  // Methods
+  function notHelloOrGoodbye(){}; // A private method
+  function hello(){}; // A public method because it's returned (see below)
+  function goodbye(){}; // A public method because it's returned (see below)
+
+  // Exposed public methods
+  return {
+      hello: hello,
+      goodbye: goodbye
+  }
+}));
+
+```
+
+### NativeJS (ES6/ES2015)
+
+```JavaScript
+
+
+// lib/counter.js
+
+var counter = 1;
+
+function increment() {
+  counter++;
+}
+
+function decrement() {
+  counter--;
+}
+
+module.exports = {
+  counter: counter,
+  increment: increment,
+  decrement: decrement
+};
+
+
+// src/main.js
+
+var counter = require('../../lib/counter');
+
+counter.increment();
+console.log(counter.counter); // 1
+
+```
+
+```JavaScript
+
+counter.counter++;
+console.log(counter.counter); // 2
+
+```
+
+```JavaScript
+
+// lib/counter.js
+export let counter = 1;
+
+export function increment() {
+  counter++;
+}
+
+export function decrement() {
+  counter--;
+}
+
+
+// src/main.js
+import * as counter from '../../counter';
+
+console.log(counter.counter); // 1
+counter.increment();
+console.log(counter.counter); // 2
+```
+
+Source: [JavaScript Modules - A Beginner's Guide](https://medium.freecodecamp.com/javascript-modules-a-beginner-s-guide-783f7d7a5fcc#.63jsjbiuj)

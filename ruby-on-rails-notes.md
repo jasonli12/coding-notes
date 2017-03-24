@@ -270,3 +270,79 @@ h1 {
   color: red;
 }
 ```
+### Seeding Data in Rails
+
+`seeds.rb` is a script we can run to seed the development database with test data.
+
+```Ruby
+
+# db/seeds.rb
+
+require 'random_data'
+
+# Create Posts
+50.times do
+# #1
+  Post.create!(
+# #2
+    title:  RandomData.random_sentence,
+    body:   RandomData.random_paragraph
+  )
+end
+posts = Post.all
+
+# Create Comments
+# #3
+100.times do
+  Comment.create!(
+# #4
+    post: posts.sample,
+    body: RandomData.random_paragraph
+  )
+end
+
+puts "Seed finished"
+puts "#{Post.count} posts created"
+puts "#{Comment.count} comments created"
+
+```
+`create!` with a bang(`!`) instructs the method to raise an error if there's a problem with the data we're seeding.
+
+`sample`: returns a random element from the array every time it's called.
+
+If we add `config.autoload_paths << File.join(config.root, "lib")` to `application.rb` it will autoload any references to the `lib` directory used by our code.
+
+`rake db:reset`: drops the database
+
+```
+Jasons-MBP:bloccit jasonli$ rake db:reset
+Dropped database 'db/development.sqlite3'
+Dropped database 'db/test.sqlite3'
+Created database 'db/development.sqlite3'
+Created database 'db/test.sqlite3'
+-- create_table("comments", {:force=>:cascade})
+   -> 0.0128s
+-- create_table("posts", {:force=>:cascade})
+   -> 0.0019s
+-- initialize_schema_migrations_table()
+   -> 0.0016s
+-- create_table("comments", {:force=>:cascade})
+   -> 0.0051s
+-- create_table("posts", {:force=>:cascade})
+   -> 0.0030s
+-- initialize_schema_migrations_table()
+   -> 0.0016s
+Seed finished
+50 posts created
+100 comments created
+```
+
+`find`: an `ActiveRecord` class method that finds the instance using the unique id passed through it.
+
+`p = Post.find 3`: We called `find` on `Post` and passed it a value that represents the unique `post_id`. `find` will return the instance (row) of post data that corresponds to an id of 3.
+
+`p.comments.count`: `count` is another `ActiveRecord` method
+
+`rake db:seed`: adds new data to your database
+
+**Idempotence**: seeding unique data using `seeds.rb` without erasing or duplicating existing data. Idempotent code can be run many times or one time with identical results.

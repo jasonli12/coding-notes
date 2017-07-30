@@ -76,7 +76,7 @@ end
 
 ```
 
-`WelcomeController` is a Ruby class and contains two empty methods corresponding to view names (i.e. `index` and `about`).
+`WelcomeController` is a Ruby class and contains two empty methods corresponding to view names (i.e. `index` and `about`). The `index` method in the `WelcomeController` will invoke the `app/views/welcome/index.html.erb` view inside `app/views/welcome`.
 
 **Default Rendering**: When a controller's method's purpose is to invoke a view, it must be named with respect to the view. Ex: The `index` method in the `WelcomeController` will invoke the `index` view inside the `app/views/welcome` directory.
 
@@ -149,7 +149,7 @@ The `has_many` method allows a post instance to have many comments related to it
 
 ### Routing in Rails
 
-The controller generator (`rails generate controller welcome index about`) created the basic code needed for the `WelcomeController` and its views, and it also created code in the `config/routes.rb` file:
+The controller generator (`rails generate controller welcome index about`) created the basic code needed for the `WelcomeController` and its views (`app/views/welcome/index.html.erb` and `app/views/welcome/about.html.erb`), and it also created code in the `config/routes.rb` file:
 
 ``` ruby
 
